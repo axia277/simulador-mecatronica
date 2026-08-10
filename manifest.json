@@ -1,0 +1,16 @@
+{
+  "name": "Simulador de Circuitos Mecatrónicos",
+  "short_name": "SimMecatrónica",
+  "description": "Simulador de conexiones para ESP32, L298N, Servomotor SG90, Motores DC y Regulador LM2596",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "icons": [
+    {
+      "src": "https://api.qrserver.com/v1/create-qr-code/?size=192x192&data=SimMecatronic",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

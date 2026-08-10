@@ -1,0 +1,381 @@
+/* Wokwi Clean White Workbench Theme for Circuit Simulator with Calibration Panel */
+
+:root {
+  --bg-dark: #0f172a;
+  --bg-workbench: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-border: #cbd5e1;
+  --accent-cyan: #0284c7;
+  --accent-blue: #2563eb;
+  --accent-indigo: #4f46e5;
+  --accent-emerald: #10b981;
+  --accent-rose: #e11d48;
+  --accent-amber: #d97706;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --shadow-glow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-workbench);
+  color: var(--text-main);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Header Navbar */
+.app-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  background: #0f172a;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 50;
+}
+
+.app-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.app-brand h1 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #38bdf8;
+}
+
+.brand-badge {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid #38bdf8;
+  color: #38bdf8;
+  padding: 0.15rem 0.6rem;
+  border-radius: 9999px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Toolbar & Wire Color Selector */
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.5rem 1.25rem;
+  background: #1e293b;
+  border-bottom: 1px solid #cbd5e1;
+}
+
+.wire-picker-label {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.wire-colors {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.color-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.color-btn.active {
+  border-color: white;
+  transform: scale(1.2);
+  box-shadow: 0 0 8px currentColor;
+}
+
+.btn-action {
+  padding: 0.4rem 0.85rem;
+  border-radius: 0.5rem;
+  font-size: 0.825rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #334155;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.btn-action:hover {
+  background: #475569;
+}
+
+.btn-verify {
+  background: linear-gradient(135deg, #0284c7, #2563eb);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+}
+
+.btn-verify:hover {
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.6);
+}
+
+/* Panel de Calibración Visual */
+.calibration-panel {
+  display: none;
+  background: #0f172a;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-bottom: 2px solid #38bdf8;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  z-index: 45;
+}
+
+.calibration-panel.active {
+  display: flex;
+}
+
+.calib-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.calib-group label {
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.calib-group select, .calib-group input[type="range"] {
+  background: #1e293b;
+  color: white;
+  border: 1px solid #475569;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.35rem;
+}
+
+/* White Workbench Canvas Container */
+.workspace-area {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 120px);
+  min-height: 500px;
+  background-color: #ffffff;
+  overflow: hidden;
+  touch-action: none;
+}
+
+#svgCanvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0; left: 0;
+  cursor: default;
+  touch-action: none;
+}
+
+/* Floating Zoom Controls for Mobile / Desktop */
+.zoom-controls {
+  position: absolute;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  z-index: 40;
+}
+
+.zoom-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 0.5rem;
+  background: #0f172a;
+  color: white;
+  border: 1px solid #334155;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: background 0.15s ease;
+}
+
+.zoom-btn:hover {
+  background: #1e293b;
+}
+
+/* Component Group Styles - SIN SOMBRAS DEBAJO DE LAS FOTOS */
+.comp-group {
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.comp-group:active {
+  cursor: grabbing;
+}
+
+/* Terminal Pins */
+.terminal-pin {
+  cursor: pointer;
+  transition: r 0.15s ease, fill 0.15s ease;
+}
+
+.terminal-pin:hover, .terminal-pin.pin-active {
+  r: 8px;
+  fill: #38bdf8 !important;
+  stroke: #ffffff;
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 0 6px #0284c7);
+}
+
+.calib-handle {
+  cursor: move;
+  stroke-dasharray: 3, 3;
+}
+
+/* Wokwi Wire Paths */
+.circuit-wire {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  cursor: pointer;
+  transition: stroke-width 0.15s ease;
+}
+
+.circuit-wire:hover {
+  stroke-width: 6px !important;
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.4));
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: #ffffff;
+  color: #0f172a;
+  border-radius: 1rem;
+  max-width: 560px;
+  width: 100%;
+  padding: 1.75rem;
+  box-shadow: var(--shadow-glow);
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.search-box-challenge {
+  background: #f8fafc;
+  border-left: 4px solid #d97706;
+  border: 1px solid #e2e8f0;
+  border-left-width: 4px;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.search-phrase {
+  font-family: monospace;
+  background: #0f172a;
+  color: #38bdf8;
+  padding: 0.6rem;
+  border-radius: 0.35rem;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  word-break: break-word;
+}
+
+.clue-box {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 0.875rem;
+  border-radius: 0.5rem;
+  font-size: 0.85rem;
+  color: #1e3a8a;
+  margin-bottom: 1.25rem;
+  line-height: 1.4;
+}
+
+/* Certificate Preview Sheet */
+.certificate-sheet {
+  background: #ffffff;
+  color: #0f172a;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  margin-top: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  border: 1px solid #cbd5e1;
+}
+
+.cert-header {
+  border-bottom: 2px solid #2563eb;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cert-hash {
+  font-family: monospace;
+  background: #f1f5f9;
+  border: 1px dashed #64748b;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+@media (max-width: 640px) {
+  .app-brand h1 { font-size: 0.95rem; }
+  .toolbar-row { padding: 0.4rem; }
+  .btn-action span { display: none; }
+}
