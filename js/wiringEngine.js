@@ -1,12 +1,12 @@
 /**
  * Motor de Cableado e Interacción Táctil SVG Estilo Wokwi
- * Restaura 100% de la Calibración Guardada en LocalStorage por el Usuario
+ * Incluye Herramienta Interactiva de Calibración de Pines, Fotos, Escala, Rotación, Bloques ESP32 y Exportación de Coordenadas
  */
 
 (function(window) {
 
-  const STORAGE_KEY = 'mecatronica_sim_state_v4';
-  const CALIB_KEYS = ['mecatronica_sim_calib_v3', 'mecatronica_sim_calib_v2', 'mecatronica_sim_calib_v1', 'mecatronica_sim_calib'];
+  const STORAGE_KEY = 'mecatronica_sim_state_v5';
+  const CALIB_KEYS = ['mecatronica_sim_calib_v5', 'mecatronica_sim_calib_v4', 'mecatronica_sim_calib_v3', 'mecatronica_sim_calib_v2', 'mecatronica_sim_calib'];
 
   let svgCanvas = null;
   let activePin = null;
@@ -31,7 +31,7 @@
 
     componentsState = JSON.parse(JSON.stringify(window.ComponentsData || []));
 
-    // Cargar obligatoriamente los parámetros que el usuario guardó en su navegador
+    // Cargar obligatoriamente los parámetros calibrados guardados en localStorage
     loadCalibratedParams();
     loadSavedState();
 
@@ -139,8 +139,10 @@
       CALIB_KEYS.forEach(key => {
         localStorage.setItem(key, JSON.stringify(calibData));
       });
+      return calibData;
     } catch (err) {
       console.warn('Error al guardar parametros calibrados:', err);
+      return null;
     }
   }
 
@@ -181,8 +183,10 @@
   }
 
   function exportCalibratedJSON() {
-    saveCalibratedParams();
-    alert('¡Todas tus posiciones y calibraciones han sido guardadas y preservadas!');
+    const data = saveCalibratedParams();
+    const jsonStr = JSON.stringify(data, null, 2);
+    console.log('PARAMETROS CALIBRADOS:', jsonStr);
+    prompt('¡Coordenadas y posiciones guardadas exitosamente en tu navegador!\n\nPuedes copiar este JSON para fijarlo permanentemente si lo deseas:', jsonStr);
   }
 
   /* --- Zoom & Pan --- */
