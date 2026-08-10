@@ -1,5 +1,5 @@
 /**
- * Definiciones vectoriales y coordenadas por defecto permanentes para alumnos
+ * Definiciones vectoriales y coordenadas por defecto permanentes para alumnos (Sin sobreposiciones)
  */
 
 (function(window) {
@@ -14,7 +14,7 @@
       initialY: 30,
       imageSrc: './img/esp32.png',
       pins: [
-        // 15 Pines Izquierda (Alineados exactamente a x = 33)
+        // 15 Pines Izquierda (Alineados a x = 33)
         { id: 'esp32_en', name: 'EN', x: 33, y: 64, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
         { id: 'esp32_vp', name: 'VP', x: 33, y: 83, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
         { id: 'esp32_vn', name: 'VN', x: 33, y: 102, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
@@ -31,7 +31,7 @@
         { id: 'esp32_gnd', name: 'GND', x: 33, y: 311, type: 'gnd', labelOffsetX: 14, labelAnchor: 'start' },
         { id: 'esp32_5v', name: 'VIN', x: 33, y: 330, type: 'power', labelOffsetX: 14, labelAnchor: 'start' },
 
-        // 15 Pines Derecha (Alineados exactamente a x = 167)
+        // 15 Pines Derecha (Alineados a x = 167)
         { id: 'esp32_3v3', name: '3V3', x: 167, y: 64, type: 'power', labelOffsetX: -14, labelAnchor: 'end' },
         { id: 'esp32_gnd2', name: 'GND', x: 167, y: 83, type: 'gnd', labelOffsetX: -14, labelAnchor: 'end' },
         { id: 'esp32_d15', name: 'D15', x: 167, y: 102, type: 'gpio', labelOffsetX: -14, labelAnchor: 'end' },
@@ -59,21 +59,21 @@
       imageSrc: './img/l298n.png',
       pins: [
         // Bornes de Alimentación (Arriba)
-        { id: 'l298n_12v', name: '12V', x: 96, y: 64, type: 'power', labelOffsetX: 0, labelOffsetY: -20, labelAnchor: 'middle' },
-        { id: 'l298n_gnd', name: 'GND', x: 115, y: 64, type: 'gnd', labelOffsetX: 0, labelOffsetY: -20, labelAnchor: 'middle' },
-        { id: 'l298n_5v', name: '5V', x: 132, y: 64, type: 'power', labelOffsetX: 0, labelOffsetY: -20, labelAnchor: 'middle' },
+        { id: 'l298n_12v', name: '12V', x: 96, y: 64, type: 'power', labelOffsetX: 0, labelOffsetY: -18, labelAnchor: 'middle' },
+        { id: 'l298n_gnd', name: 'GND', x: 115, y: 64, type: 'gnd', labelOffsetX: 0, labelOffsetY: -18, labelAnchor: 'middle' },
+        { id: 'l298n_5v', name: '5V', x: 132, y: 64, type: 'power', labelOffsetX: 0, labelOffsetY: -18, labelAnchor: 'middle' },
 
-        // Pines Lógicos IN1..IN4
-        { id: 'l298n_in1', name: 'IN1', x: 57, y: 130, type: 'input', labelOffsetX: 16, labelAnchor: 'start' },
-        { id: 'l298n_in2', name: 'IN2', x: 57, y: 142, type: 'input', labelOffsetX: 16, labelAnchor: 'start' },
-        { id: 'l298n_in3', name: 'IN3', x: 57, y: 154, type: 'input', labelOffsetX: 16, labelAnchor: 'start' },
-        { id: 'l298n_in4', name: 'IN4', x: 57, y: 166, type: 'input', labelOffsetX: 16, labelAnchor: 'start' },
+        // Pines Lógicos IN1..IN4 (Abajo Izquierda)
+        { id: 'l298n_in1', name: 'IN1', x: 57, y: 125, type: 'input', labelOffsetX: 16, labelAnchor: 'start' },
+        { id: 'l298n_in2', name: 'IN2', x: 57, y: 139, type: 'input', labelOffsetX: 16, labelAnchor: 'start' },
+        { id: 'l298n_in3', name: 'IN3', x: 57, y: 153, type: 'input', labelOffsetX: 16, labelAnchor: 'start' },
+        { id: 'l298n_in4', name: 'IN4', x: 57, y: 167, type: 'input', labelOffsetX: 16, labelAnchor: 'start' },
 
-        // Bornes OUT1..OUT4 Agrupados cerca de los conectores
-        { id: 'l298n_out1', name: 'OUT1', x: 92, y: 168, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' },
-        { id: 'l298n_out2', name: 'OUT2', x: 110, y: 168, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' },
-        { id: 'l298n_out3', name: 'OUT3', x: 136, y: 168, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' },
-        { id: 'l298n_out4', name: 'OUT4', x: 154, y: 168, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' }
+        // Bornes OUT1..OUT4 (Abajo Derecha)
+        { id: 'l298n_out1', name: 'OUT1', x: 92, y: 172, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' },
+        { id: 'l298n_out2', name: 'OUT2', x: 110, y: 172, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' },
+        { id: 'l298n_out3', name: 'OUT3', x: 136, y: 172, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' },
+        { id: 'l298n_out4', name: 'OUT4', x: 154, y: 172, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' }
       ]
     },
     {
@@ -100,8 +100,9 @@
       initialY: 430,
       imageSrc: './img/battery.png',
       pins: [
-        { id: 'bat_pos', name: '12V', x: 130, y: 114, type: 'power', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' },
-        { id: 'bat_neg', name: 'GND', x: 138, y: 122, type: 'gnd', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' }
+        // Conexión exacta en las puntas peladas de los cables rojo (+) y negro (-)
+        { id: 'bat_pos', name: '12V', x: 152, y: 138, type: 'power', labelOffsetX: 16, labelOffsetY: 3, labelAnchor: 'start' },
+        { id: 'bat_neg', name: 'GND', x: 180, y: 152, type: 'gnd', labelOffsetX: 16, labelOffsetY: 3, labelAnchor: 'start' }
       ]
     },
     {
@@ -113,8 +114,8 @@
       initialY: 430,
       imageSrc: './img/switch.png',
       pins: [
-        { id: 'sw_in', name: 'Pin A', x: 50, y: 110, type: 'switch', labelOffsetX: 0, labelOffsetY: 16, labelAnchor: 'middle' },
-        { id: 'sw_out', name: 'Pin B', x: 92, y: 110, type: 'switch', labelOffsetX: 0, labelOffsetY: 16, labelAnchor: 'middle' }
+        { id: 'sw_in', name: 'Pin A', x: 45, y: 115, type: 'switch', labelOffsetX: -14, labelOffsetY: 3, labelAnchor: 'end' },
+        { id: 'sw_out', name: 'Pin B', x: 95, y: 115, type: 'switch', labelOffsetX: 14, labelOffsetY: 3, labelAnchor: 'start' }
       ]
     },
     {
@@ -126,8 +127,8 @@
       initialY: 30,
       imageSrc: './img/motor.png',
       pins: [
-        { id: 'motA_pos', name: 'M1+', x: 140, y: 64, type: 'motor', labelOffsetX: -14, labelAnchor: 'end' },
-        { id: 'motA_neg', name: 'M1-', x: 140, y: 82, type: 'motor', labelOffsetX: -14, labelAnchor: 'end' }
+        { id: 'motA_pos', name: 'M1+', x: 142, y: 55, type: 'motor', labelOffsetX: -16, labelAnchor: 'end' },
+        { id: 'motA_neg', name: 'M1-', x: 142, y: 85, type: 'motor', labelOffsetX: -16, labelAnchor: 'end' }
       ]
     },
     {
@@ -139,8 +140,8 @@
       initialY: 175,
       imageSrc: './img/motor.png',
       pins: [
-        { id: 'motB_pos', name: 'M2+', x: 140, y: 64, type: 'motor', labelOffsetX: -14, labelAnchor: 'end' },
-        { id: 'motB_neg', name: 'M2-', x: 140, y: 82, type: 'motor', labelOffsetX: -14, labelAnchor: 'end' }
+        { id: 'motB_pos', name: 'M2+', x: 142, y: 55, type: 'motor', labelOffsetX: -16, labelAnchor: 'end' },
+        { id: 'motB_neg', name: 'M2-', x: 142, y: 85, type: 'motor', labelOffsetX: -16, labelAnchor: 'end' }
       ]
     },
     {
@@ -152,9 +153,9 @@
       initialY: 30,
       imageSrc: './img/sg90.png',
       pins: [
-        { id: 'sg90_vcc', name: 'VCC', x: 124, y: 110, type: 'power', labelOffsetX: 0, labelOffsetY: 16, labelAnchor: 'middle' },
-        { id: 'sg90_gnd', name: 'GND', x: 134, y: 110, type: 'gnd', labelOffsetX: 0, labelOffsetY: 16, labelAnchor: 'middle' },
-        { id: 'sg90_pwm', name: 'PWM', x: 144, y: 110, type: 'signal', labelOffsetX: 0, labelOffsetY: 16, labelAnchor: 'middle' }
+        { id: 'sg90_vcc', name: 'VCC', x: 115, y: 115, type: 'power', labelOffsetX: -14, labelOffsetY: 3, labelAnchor: 'end' },
+        { id: 'sg90_gnd', name: 'GND', x: 135, y: 115, type: 'gnd', labelOffsetX: 0, labelOffsetY: 16, labelAnchor: 'middle' },
+        { id: 'sg90_pwm', name: 'PWM', x: 155, y: 115, type: 'signal', labelOffsetX: 14, labelOffsetY: 3, labelAnchor: 'start' }
       ]
     }
   ];
