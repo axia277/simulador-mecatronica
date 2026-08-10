@@ -1,5 +1,5 @@
 /**
- * Definiciones definitivas de componentes con coordenadas calibradas y pulidas
+ * Definiciones vectoriales y coordenadas por defecto permanentes para alumnos
  */
 
 (function(window) {
@@ -14,7 +14,7 @@
       initialY: 30,
       imageSrc: './img/esp32.png',
       pins: [
-        // 15 Pines Izquierda (Alineados a x = 33)
+        // 15 Pines Izquierda (Alineados exactamente a x = 33)
         { id: 'esp32_en', name: 'EN', x: 33, y: 64, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
         { id: 'esp32_vp', name: 'VP', x: 33, y: 83, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
         { id: 'esp32_vn', name: 'VN', x: 33, y: 102, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
@@ -23,15 +23,15 @@
         { id: 'esp32_d32', name: 'D32', x: 33, y: 159, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
         { id: 'esp32_d33', name: 'D33', x: 33, y: 178, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
         { id: 'esp32_d25', name: 'D25', x: 33, y: 197, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
-        { id: 'esp32_gpio26', name: 'D26', x: 33, y: 216, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' }, // Servo PWM
-        { id: 'esp32_gpio27', name: 'D27', x: 33, y: 235, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' }, // IN4
-        { id: 'esp32_gpio14', name: 'D14', x: 33, y: 254, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' }, // IN3
-        { id: 'esp32_gpio12', name: 'D12', x: 33, y: 273, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' }, // IN1
-        { id: 'esp32_gpio13', name: 'D13', x: 33, y: 292, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' }, // IN2
+        { id: 'esp32_gpio26', name: 'D26', x: 33, y: 216, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
+        { id: 'esp32_gpio27', name: 'D27', x: 33, y: 235, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
+        { id: 'esp32_gpio14', name: 'D14', x: 33, y: 254, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
+        { id: 'esp32_gpio12', name: 'D12', x: 33, y: 273, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
+        { id: 'esp32_gpio13', name: 'D13', x: 33, y: 292, type: 'gpio', labelOffsetX: 14, labelAnchor: 'start' },
         { id: 'esp32_gnd', name: 'GND', x: 33, y: 311, type: 'gnd', labelOffsetX: 14, labelAnchor: 'start' },
         { id: 'esp32_5v', name: 'VIN', x: 33, y: 330, type: 'power', labelOffsetX: 14, labelAnchor: 'start' },
 
-        // 15 Pines Derecha (Alineados a x = 167)
+        // 15 Pines Derecha (Alineados exactamente a x = 167)
         { id: 'esp32_3v3', name: '3V3', x: 167, y: 64, type: 'power', labelOffsetX: -14, labelAnchor: 'end' },
         { id: 'esp32_gnd2', name: 'GND', x: 167, y: 83, type: 'gnd', labelOffsetX: -14, labelAnchor: 'end' },
         { id: 'esp32_d15', name: 'D15', x: 167, y: 102, type: 'gpio', labelOffsetX: -14, labelAnchor: 'end' },
@@ -58,7 +58,7 @@
       initialY: 30,
       imageSrc: './img/l298n.png',
       pins: [
-        // Bornes Superiores de Alimentación (12V / GND / 5V)
+        // Bornes de Alimentación (Arriba)
         { id: 'l298n_12v', name: '12V', x: 96, y: 64, type: 'power', labelOffsetX: 0, labelOffsetY: -20, labelAnchor: 'middle' },
         { id: 'l298n_gnd', name: 'GND', x: 115, y: 64, type: 'gnd', labelOffsetX: 0, labelOffsetY: -20, labelAnchor: 'middle' },
         { id: 'l298n_5v', name: '5V', x: 132, y: 64, type: 'power', labelOffsetX: 0, labelOffsetY: -20, labelAnchor: 'middle' },
@@ -69,7 +69,7 @@
         { id: 'l298n_in3', name: 'IN3', x: 57, y: 154, type: 'input', labelOffsetX: 16, labelAnchor: 'start' },
         { id: 'l298n_in4', name: 'IN4', x: 57, y: 166, type: 'input', labelOffsetX: 16, labelAnchor: 'start' },
 
-        // Bornes de Potencia OUT1..OUT4 Agrupados cerca de los conectores de tornillo
+        // Bornes OUT1..OUT4 Agrupados cerca de los conectores
         { id: 'l298n_out1', name: 'OUT1', x: 92, y: 168, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' },
         { id: 'l298n_out2', name: 'OUT2', x: 110, y: 168, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' },
         { id: 'l298n_out3', name: 'OUT3', x: 136, y: 168, type: 'output', labelOffsetX: 0, labelOffsetY: 18, labelAnchor: 'middle' },

@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./css/simulator.css?v=2">
+  <link rel="stylesheet" href="./css/simulator.css?v=3">
 </head>
 <body>
 
@@ -51,13 +51,6 @@
 
     <div style="flex: 1;"></div>
 
-    <button class="btn-action" id="btnCalibrate" style="background: #0284c7; color: white;">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 2v20M2 12h20"/>
-      </svg>
-      <span>📐 Modo Calibración Pines</span>
-    </button>
-
     <button class="btn-action" id="btnDeleteSelected" style="color: var(--accent-rose);">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="18" y1="6" x2="6" y2="18"/>
@@ -72,39 +65,6 @@
         <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
       </svg>
       <span>Borrar Todo</span>
-    </button>
-  </div>
-
-  <!-- Drawer Panel de Calibración Visual de Pines y Fotos -->
-  <div class="calibration-panel" id="calibrationPanel">
-    <div class="calib-group">
-      <label>Componente a Calibrar:</label>
-      <select id="calibCompSelect">
-        <option value="esp32">ESP32 DevKit V1</option>
-        <option value="l298n">Puente H L298N</option>
-        <option value="lm2596">Regulador LM2596</option>
-        <option value="battery">Portapilas Litio</option>
-        <option value="switch">Interruptor SPST</option>
-        <option value="motorA">Motoreductor A</option>
-        <option value="motorB">Motoreductor B</option>
-        <option value="sg90">Servomotor SG90</option>
-      </select>
-    </div>
-
-    <div class="calib-group">
-      <label>Escala Foto:</label>
-      <input type="range" id="calibScale" min="0.5" max="2.0" step="0.05" value="1.0">
-    </div>
-
-    <div class="calib-group">
-      <label>Rotación (°):</label>
-      <input type="range" id="calibRotation" min="0" max="360" step="5" value="0">
-    </div>
-
-    <div style="flex: 1;"></div>
-
-    <button class="btn-action" id="btnSaveCalib" style="background: #10b981; color: white;">
-      💾 Guardar Coordenadas Calibradas
     </button>
   </div>
 
@@ -178,11 +138,11 @@
   </div>
 
   <!-- JavaScript Modules -->
-  <script src="./js/componentsData.js?v=2"></script>
-  <script src="./js/wiringEngine.js?v=2"></script>
-  <script src="./js/evaluator.js?v=2"></script>
-  <script src="./js/certificate.js?v=2"></script>
-  <script src="./js/simApp.js?v=2"></script>
+  <script src="./js/componentsData.js?v=3"></script>
+  <script src="./js/wiringEngine.js?v=3"></script>
+  <script src="./js/evaluator.js?v=3"></script>
+  <script src="./js/certificate.js?v=3"></script>
+  <script src="./js/simApp.js?v=3"></script>
 
 </body>
 </html>

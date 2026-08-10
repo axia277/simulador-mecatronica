@@ -1,12 +1,11 @@
 /**
  * Motor de Cableado e Interacción Táctil SVG Estilo Wokwi
- * Incluye Herramienta Interactiva de Calibración de Pines, Fotos, Escala, Rotación, Bloques ESP32 y Exportación de Coordenadas
+ * Edición Estudiante: Coordenadas Definitivas Calibradas Fijas, Persistencia LocalStorage y Zoom Táctil
  */
 
 (function(window) {
 
-  const STORAGE_KEY = 'mecatronica_sim_state_v5';
-  const CALIB_KEYS = ['mecatronica_sim_calib_v5', 'mecatronica_sim_calib_v4', 'mecatronica_sim_calib_v3', 'mecatronica_sim_calib_v2', 'mecatronica_sim_calib'];
+  const STORAGE_KEY = 'mecatronica_sim_state_v6';
 
   let svgCanvas = null;
   let activePin = null;
@@ -14,10 +13,6 @@
   let currentColor = '#ef4444';
   let wires = [];
   let componentsState = [];
-
-  // Modo Calibración
-  let isCalibrationMode = false;
-  let selectedCalibCompId = 'esp32';
 
   // Zoom & Pan State
   let zoomScale = 1.0;
@@ -31,8 +26,6 @@
 
     componentsState = JSON.parse(JSON.stringify(window.ComponentsData || []));
 
-    // Cargar obligatoriamente los parámetros calibrados guardados en localStorage
-    loadCalibratedParams();
     loadSavedState();
 
     svgCanvas.addEventListener('click', (e) => {
@@ -58,35 +51,7 @@
     renderAll();
   }
 
-  function setCalibrationMode(active) {
-    isCalibrationMode = active;
-    renderAll();
-  }
-
-  function setSelectedCalibComponent(compId) {
-    selectedCalibCompId = compId;
-    renderAll();
-  }
-
-  function updateCompScale(scaleVal) {
-    const comp = componentsState.find(c => c.id === selectedCalibCompId);
-    if (comp) {
-      comp.scale = parseFloat(scaleVal) || 1.0;
-      saveCalibratedParams();
-      renderAll();
-    }
-  }
-
-  function updateCompRotation(rotVal) {
-    const comp = componentsState.find(c => c.id === selectedCalibCompId);
-    if (comp) {
-      comp.rotation = parseFloat(rotVal) || 0;
-      saveCalibratedParams();
-      renderAll();
-    }
-  }
-
-  /* --- Persistencia LocalStorage --- */
+  /* --- Persistencia LocalStorage para Cables y Posición --- */
   function saveCurrentState() {
     try {
       const stateToSave = {
@@ -119,74 +84,6 @@
     } catch (err) {
       console.warn('Error al cargar estado de localStorage:', err);
     }
-  }
-
-  function saveCalibratedParams() {
-    try {
-      const calibData = componentsState.map(c => ({
-        id: c.id,
-        scale: c.scale || 1.0,
-        rotation: c.rotation || 0,
-        pins: c.pins.map(p => ({
-          id: p.id,
-          x: p.x,
-          y: p.y,
-          labelOffsetX: p.labelOffsetX,
-          labelOffsetY: p.labelOffsetY,
-          labelAnchor: p.labelAnchor
-        }))
-      }));
-      CALIB_KEYS.forEach(key => {
-        localStorage.setItem(key, JSON.stringify(calibData));
-      });
-      return calibData;
-    } catch (err) {
-      console.warn('Error al guardar parametros calibrados:', err);
-      return null;
-    }
-  }
-
-  function loadCalibratedParams() {
-    try {
-      let calibRaw = null;
-      for (const key of CALIB_KEYS) {
-        calibRaw = localStorage.getItem(key);
-        if (calibRaw) break;
-      }
-      if (!calibRaw) return;
-
-      const calib = JSON.parse(calibRaw);
-      if (Array.isArray(calib)) {
-        calib.forEach(item => {
-          const comp = componentsState.find(c => c.id === item.id);
-          if (comp) {
-            comp.scale = item.scale || 1.0;
-            comp.rotation = item.rotation || 0;
-            if (item.pins && Array.isArray(item.pins)) {
-              item.pins.forEach(pSaved => {
-                const pin = comp.pins.find(p => p.id === pSaved.id);
-                if (pin) {
-                  pin.x = pSaved.x;
-                  pin.y = pSaved.y;
-                  if (pSaved.labelOffsetX !== undefined) pin.labelOffsetX = pSaved.labelOffsetX;
-                  if (pSaved.labelOffsetY !== undefined) pin.labelOffsetY = pSaved.labelOffsetY;
-                  if (pSaved.labelAnchor !== undefined) pin.labelAnchor = pSaved.labelAnchor;
-                }
-              });
-            }
-          }
-        });
-      }
-    } catch (err) {
-      console.warn('Error al cargar parametros calibrados:', err);
-    }
-  }
-
-  function exportCalibratedJSON() {
-    const data = saveCalibratedParams();
-    const jsonStr = JSON.stringify(data, null, 2);
-    console.log('PARAMETROS CALIBRADOS:', jsonStr);
-    prompt('¡Coordenadas y posiciones guardadas exitosamente en tu navegador!\n\nPuedes copiar este JSON para fijarlo permanentemente si lo deseas:', jsonStr);
   }
 
   /* --- Zoom & Pan --- */
@@ -321,7 +218,7 @@
       group.appendChild(img);
     }
 
-    // Título arriba
+    // Título arriba con alto contraste
     const titleBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     titleBg.setAttribute('x', 6);
     titleBg.setAttribute('y', -18);
@@ -342,12 +239,6 @@
     title.textContent = comp.name;
     group.appendChild(title);
 
-    const isTargetCalibComp = isCalibrationMode && (comp.id === selectedCalibCompId);
-
-    if (isTargetCalibComp && comp.id === 'esp32') {
-      renderEsp32BlockHandles(group, comp);
-    }
-
     // Pines Interactivos
     comp.pins.forEach(pin => {
       const pinGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -360,20 +251,16 @@
       pinCircle.setAttribute('cx', pin.x * scale);
       pinCircle.setAttribute('cy', pin.y * scale);
       pinCircle.setAttribute('r', 6.5);
-      pinCircle.setAttribute('fill', isTargetCalibComp ? '#e11d48' : '#0f172a');
+      pinCircle.setAttribute('fill', '#0f172a');
       pinCircle.setAttribute('stroke', '#38bdf8');
       pinCircle.setAttribute('stroke-width', 2);
       pinCircle.setAttribute('data-pin-id', pin.id);
       pinCircle.setAttribute('data-comp-id', comp.id);
 
-      if (isTargetCalibComp && comp.id !== 'esp32') {
-        enablePinDrag(pinCircle, comp, pin);
-      } else {
-        pinCircle.addEventListener('click', (e) => {
-          e.stopPropagation();
-          handlePinClick(comp, pin);
-        });
-      }
+      pinCircle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handlePinClick(comp, pin);
+      });
 
       pinGroup.appendChild(pinCircle);
 
@@ -394,7 +281,6 @@
         labelBg.setAttribute('height', 12);
         labelBg.setAttribute('rx', 2);
         labelBg.setAttribute('fill', '#0f172a');
-        labelBg.setAttribute('style', isTargetCalibComp ? 'cursor: move;' : '');
 
         const pinLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         pinLabel.setAttribute('x', bgX + textWidth / 2);
@@ -404,13 +290,7 @@
         pinLabel.setAttribute('font-weight', 'bold');
         pinLabel.setAttribute('font-family', 'monospace');
         pinLabel.setAttribute('text-anchor', 'middle');
-        pinLabel.setAttribute('style', isTargetCalibComp ? 'cursor: move;' : '');
         pinLabel.textContent = pin.name;
-
-        if (isTargetCalibComp) {
-          enableLabelDrag(labelBg, comp, pin);
-          enableLabelDrag(pinLabel, comp, pin);
-        }
 
         pinGroup.appendChild(labelBg);
         pinGroup.appendChild(pinLabel);
@@ -421,172 +301,6 @@
 
     enableDrag(group, comp);
     layer.appendChild(group);
-  }
-
-  function renderEsp32BlockHandles(group, comp) {
-    const scale = comp.scale || 1.0;
-
-    const gL = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    const hLeft = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    hLeft.setAttribute('class', 'calib-handle');
-    hLeft.setAttribute('x', 5);
-    hLeft.setAttribute('y', 40);
-    hLeft.setAttribute('width', 45); hLeft.setAttribute('height', 310);
-    hLeft.setAttribute('rx', 6); hLeft.setAttribute('fill', 'rgba(2, 132, 199, 0.25)');
-    hLeft.setAttribute('stroke', '#0284c7'); hLeft.setAttribute('stroke-width', 2.5);
-
-    const txtL = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    txtL.setAttribute('x', 27); txtL.setAttribute('y', 190);
-    txtL.setAttribute('fill', '#38bdf8'); txtL.setAttribute('font-size', '10');
-    txtL.setAttribute('font-weight', 'bold'); txtL.setAttribute('text-anchor', 'middle');
-    txtL.setAttribute('transform', 'rotate(-90 27 190)');
-    txtL.textContent = '↔ ARRASTRAR BLOQUE IZQUIERDO (15 PINES)';
-
-    gL.appendChild(hLeft); gL.appendChild(txtL);
-    enableBlockDrag(gL, comp, 'left');
-    group.appendChild(gL);
-
-    const gR = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    const hRight = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    hRight.setAttribute('class', 'calib-handle');
-    hRight.setAttribute('x', (comp.width * scale) - 50);
-    hRight.setAttribute('y', 40);
-    hRight.setAttribute('width', 45); hRight.setAttribute('height', 310);
-    hRight.setAttribute('rx', 6); hRight.setAttribute('fill', 'rgba(16, 185, 129, 0.25)');
-    hRight.setAttribute('stroke', '#10b981'); hRight.setAttribute('stroke-width', 2.5);
-
-    const txtR = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    txtR.setAttribute('x', (comp.width * scale) - 27); txtR.setAttribute('y', 190);
-    txtR.setAttribute('fill', '#10b981'); txtR.setAttribute('font-size', '10');
-    txtR.setAttribute('font-weight', 'bold'); txtR.setAttribute('text-anchor', 'middle');
-    txtR.setAttribute('transform', `rotate(90 ${(comp.width * scale) - 27} 190)`);
-    txtR.textContent = '↔ ARRASTRAR BLOQUE DERECHO (15 PINES)';
-
-    gR.appendChild(hRight); gR.appendChild(txtR);
-    enableBlockDrag(gR, comp, 'right');
-    group.appendChild(gR);
-  }
-
-  function enableBlockDrag(element, comp, side) {
-    let isDragging = false;
-    let startPt = { x: 0, y: 0 };
-
-    const onStart = (e) => {
-      e.stopPropagation();
-      isDragging = true;
-      startPt = getSVGPoint(e);
-    };
-
-    const onMove = (e) => {
-      if (!isDragging) return;
-      const currentPt = getSVGPoint(e);
-      const dx = currentPt.x - startPt.x;
-      const dy = currentPt.y - startPt.y;
-      startPt = currentPt;
-
-      const scale = comp.scale || 1.0;
-      const pinIndexStart = side === 'left' ? 0 : 15;
-      const pinIndexEnd = side === 'left' ? 15 : comp.pins.length;
-
-      for (let i = pinIndexStart; i < pinIndexEnd; i++) {
-        comp.pins[i].x += dx / scale;
-        comp.pins[i].y += dy / scale;
-      }
-      renderAll();
-    };
-
-    const onEnd = () => {
-      if (isDragging) {
-        isDragging = false;
-        saveCalibratedParams();
-        renderAll();
-      }
-    };
-
-    element.addEventListener('mousedown', onStart);
-    element.addEventListener('touchstart', onStart, { passive: true });
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, { passive: true });
-    window.addEventListener('mouseup', onEnd);
-    window.addEventListener('touchend', onEnd);
-  }
-
-  function enablePinDrag(element, comp, pin) {
-    let isDragging = false;
-    let startPt = { x: 0, y: 0 };
-
-    const onStart = (e) => {
-      e.stopPropagation();
-      isDragging = true;
-      startPt = getSVGPoint(e);
-    };
-
-    const onMove = (e) => {
-      if (!isDragging) return;
-      const currentPt = getSVGPoint(e);
-      const dx = currentPt.x - startPt.x;
-      const dy = currentPt.y - startPt.y;
-      startPt = currentPt;
-
-      const scale = comp.scale || 1.0;
-      pin.x += dx / scale;
-      pin.y += dy / scale;
-      renderAll();
-    };
-
-    const onEnd = () => {
-      if (isDragging) {
-        isDragging = false;
-        saveCalibratedParams();
-        renderAll();
-      }
-    };
-
-    element.addEventListener('mousedown', onStart);
-    element.addEventListener('touchstart', onStart, { passive: true });
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, { passive: true });
-    window.addEventListener('mouseup', onEnd);
-    window.addEventListener('touchend', onEnd);
-  }
-
-  function enableLabelDrag(element, comp, pin) {
-    let isDragging = false;
-    let startPt = { x: 0, y: 0 };
-
-    const onStart = (e) => {
-      e.stopPropagation();
-      isDragging = true;
-      startPt = getSVGPoint(e);
-    };
-
-    const onMove = (e) => {
-      if (!isDragging) return;
-      const currentPt = getSVGPoint(e);
-      const dx = currentPt.x - startPt.x;
-      const dy = currentPt.y - startPt.y;
-      startPt = currentPt;
-
-      const scale = comp.scale || 1.0;
-      pin.labelOffsetX = (pin.labelOffsetX || 0) + (dx / scale);
-      pin.labelOffsetY = (pin.labelOffsetY || 0) + (dy / scale);
-      renderAll();
-    };
-
-    const onEnd = () => {
-      if (isDragging) {
-        isDragging = false;
-        saveCalibratedParams();
-        renderAll();
-      }
-    };
-
-    element.addEventListener('mousedown', onStart);
-    element.addEventListener('touchstart', onStart, { passive: true });
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('touchmove', onMove, { passive: true });
-    window.addEventListener('mouseup', onEnd);
-    window.addEventListener('touchend', onEnd);
   }
 
   function handlePinClick(comp, pin) {
@@ -733,7 +447,7 @@
     let offsetSVGY = 0;
 
     const onStart = (e) => {
-      if (e.target && (e.target.classList.contains('terminal-pin') || e.target.classList.contains('calib-handle'))) return;
+      if (e.target && e.target.classList.contains('terminal-pin')) return;
 
       isDragging = true;
       selectedWireId = null;
@@ -795,11 +509,6 @@
     zoomIn,
     zoomOut,
     resetZoom,
-    setCalibrationMode,
-    setSelectedCalibComponent,
-    updateCompScale,
-    updateCompRotation,
-    exportCalibratedJSON,
     getSelectedWireId: () => selectedWireId,
     getConnectedNetlist,
     getWires: () => wires,

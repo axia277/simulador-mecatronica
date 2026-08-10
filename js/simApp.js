@@ -6,7 +6,6 @@
 
   let studentName = '';
   let studentRut = '';
-  let isCalibPanelOpen = false;
 
   function boot() {
     if (window.WiringEngine) {
@@ -25,56 +24,6 @@
         }
       });
     });
-
-    // Botón Modo Calibración
-    const btnCalibrate = document.getElementById('btnCalibrate');
-    const calibPanel = document.getElementById('calibrationPanel');
-    if (btnCalibrate && calibPanel) {
-      btnCalibrate.addEventListener('click', () => {
-        isCalibPanelOpen = !isCalibPanelOpen;
-        if (isCalibPanelOpen) {
-          calibPanel.classList.add('active');
-          btnCalibrate.style.background = '#e11d48';
-          btnCalibrate.querySelector('span').textContent = '❌ Salir de Calibración';
-          if (window.WiringEngine) window.WiringEngine.setCalibrationMode(true);
-        } else {
-          calibPanel.classList.remove('active');
-          btnCalibrate.style.background = '#0284c7';
-          btnCalibrate.querySelector('span').textContent = '📐 Modo Calibración Pines';
-          if (window.WiringEngine) window.WiringEngine.setCalibrationMode(false);
-        }
-      });
-    }
-
-    // Selectores del Panel de Calibración
-    const calibCompSelect = document.getElementById('calibCompSelect');
-    if (calibCompSelect) {
-      calibCompSelect.addEventListener('change', (e) => {
-        const compId = e.target.value;
-        if (window.WiringEngine) window.WiringEngine.setSelectedCalibComponent(compId);
-      });
-    }
-
-    const calibScale = document.getElementById('calibScale');
-    if (calibScale) {
-      calibScale.addEventListener('input', (e) => {
-        if (window.WiringEngine) window.WiringEngine.updateCompScale(e.target.value);
-      });
-    }
-
-    const calibRotation = document.getElementById('calibRotation');
-    if (calibRotation) {
-      calibRotation.addEventListener('input', (e) => {
-        if (window.WiringEngine) window.WiringEngine.updateCompRotation(e.target.value);
-      });
-    }
-
-    const btnSaveCalib = document.getElementById('btnSaveCalib');
-    if (btnSaveCalib) {
-      btnSaveCalib.addEventListener('click', () => {
-        if (window.WiringEngine) window.WiringEngine.exportCalibratedJSON();
-      });
-    }
 
     // Botón Eliminar Cable Seleccionado
     const btnDeleteSelected = document.getElementById('btnDeleteSelected');
