@@ -1,13 +1,13 @@
 /**
- * Generador de Plano de Conexiones y Sistema de Registro Automático de Alumnos (Master Log & Webhook)
+ * Generador de Plano de Conexiones y Sistema de Registro Automático de Alumnos (Google Sheets Webhook)
  */
 
 (function(window) {
 
-  const COMPLETION_LOG_KEY = 'mecatronica_completion_master_log_v1';
+  const COMPLETION_LOG_KEY = 'mecatronica_completion_master_log_v2';
   
-  // URL opcional de Webhook de Google Sheets / Apps Script para recibir datos en vivo
-  const GOOGLE_SHEET_WEBHOOK_URL = window.GOOGLE_SHEET_WEBHOOK_URL || '';
+  // URL de Webhook de Google Sheets conectada a la planilla CircuitoAuto
+  const GOOGLE_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbzeoapG-lmkeoPaNjn-dmcjM2Y1ypVrovqOc1I8cngpRXfAferhZ3Da8zX4J789rTE/exec';
 
   /**
    * Genera la dirección MAC simulada del PC
@@ -73,15 +73,15 @@
       console.warn('Error al guardar en registro local:', e);
     }
 
-    // 2. Enviar a Webhook de Google Sheets si está configurado
+    // 2. Enviar a la Planilla de Google Sheets (CircuitoAuto)
     if (GOOGLE_SHEET_WEBHOOK_URL) {
       try {
         fetch(GOOGLE_SHEET_WEBHOOK_URL, {
           method: 'POST',
           mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(record)
-        }).catch(err => console.warn('Error al enviar Webhook:', err));
+        }).catch(err => console.warn('Error al enviar a Google Sheets:', err));
       } catch (err) {
         console.warn('Error en fetch Webhook:', err);
       }
@@ -96,7 +96,7 @@
     const timestampStr = new Date().toLocaleString('es-CL');
     const hash = generateVerificationHash(studentName, studentRut, macAddress, Date.now(), netlist);
 
-    // Guardar registro automáticamente
+    // Guardar y notificar a la planilla de Google Sheets automáticamente
     logStudentCompletion(studentName, studentRut, macAddress, hash, timestampStr);
 
     const modal = document.getElementById('certificateModal');
